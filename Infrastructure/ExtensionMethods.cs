@@ -17,10 +17,15 @@ namespace Infrastructure
             services.AddDbContext<ApplicationContext>(optionsBuilder =>
                 optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
                     x => x.MigrationsAssembly("Infrastructure")));
-            services.AddSingleton(sp =>
-                new BlobServiceClient(configuration.GetConnectionString("AzureBlobStorageConnection")));
 
-            services.AddSingleton<IBlobRepository, BlobRepository>();
+            //services.AddSingleton(sp =>
+            //    new BlobServiceClient(configuration.GetConnectionString("AzureBlobStorageConnection")));
+
+            //services.AddSingleton<IBlobRepository, BlobRepository>();
+
+            // Replace BlobRepository with LocalFileRepository
+            services.AddSingleton<IBlobRepository, LocalFileRepository>();
+
 
             services.AddTransient<IHashingService, HashingService>();
             services.AddTransient<IUserRepository, UserRepository>();
@@ -28,6 +33,7 @@ namespace Infrastructure
             services.AddTransient<IPostRepository, PostRepository>();
             services.AddTransient<IPostConnectionRepository, PostConnectionRepository>();
             services.AddTransient<IImageRepository, ImageRepository>();
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
         }
